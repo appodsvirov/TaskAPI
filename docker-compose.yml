@@ -1,0 +1,6 @@
+services:
+  taskapi:
+    image: ${DOCKER_REGISTRY-}taskapi
+    build:
+      context: .
+      dockerfile: TaskAPI/Dockerfile
