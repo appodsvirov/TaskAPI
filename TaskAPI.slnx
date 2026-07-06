@@ -2,5 +2,6 @@
   <Project Path="docker-compose.dcproj">
     <Build />
   </Project>
+  <Project Path="TaskAPI.Tests/TaskAPI.Tests.csproj" />
   <Project Path="TaskAPI/TaskAPI.csproj" />
 </Solution>

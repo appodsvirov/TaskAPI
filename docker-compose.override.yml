@@ -2,17 +2,17 @@ services:
   taskapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
+      - ASPNETCORE_HTTP_PORTS=8980
+      - ASPNETCORE_HTTPS_PORTS=8981
       - ConnectionStrings__DefaultConnection=${POSTGRES_CONNECTION_STRING}
       - RabbitMq__Host=rabbitmq
-      - RabbitMq__Port=5672
+      - RabbitMq__Port=5972
       - RabbitMq__UserName=${RABBITMQ_DEFAULT_USER}
       - RabbitMq__Password=${RABBITMQ_DEFAULT_PASS}
       - RabbitMq__VirtualHost=${RABBITMQ_DEFAULT_VHOST}
     ports:
-      - "8080"
-      - "8081"
+      - "8980"
+      - "8981"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
@@ -21,9 +21,9 @@ services:
 
   postgres:
     ports:
-      - "${POSTGRES_PORT}:5432"
+      - "${POSTGRES_PORT}:5932"
 
   rabbitmq:
     ports:
-      - "${RABBITMQ_PORT}:5672"
-      - "${RABBITMQ_MANAGEMENT_PORT}:15672"
+      - "${RABBITMQ_PORT}:5972"
+      - "${RABBITMQ_MANAGEMENT_PORT}:15972"
