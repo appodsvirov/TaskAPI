@@ -6,7 +6,7 @@ services:
       - ASPNETCORE_HTTPS_PORTS=8981
       - ConnectionStrings__DefaultConnection=${POSTGRES_CONNECTION_STRING}
       - RabbitMq__Host=rabbitmq
-      - RabbitMq__Port=5972
+      - RabbitMq__Port=5672
       - RabbitMq__UserName=${RABBITMQ_DEFAULT_USER}
       - RabbitMq__Password=${RABBITMQ_DEFAULT_PASS}
       - RabbitMq__VirtualHost=${RABBITMQ_DEFAULT_VHOST}
@@ -19,11 +19,28 @@ services:
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
+  taskconsumer:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - RabbitMq__Host=rabbitmq
+      - RabbitMq__Port=5672
+      - RabbitMq__UserName=${RABBITMQ_DEFAULT_USER}
+      - RabbitMq__Password=${RABBITMQ_DEFAULT_PASS}
+      - RabbitMq__VirtualHost=${RABBITMQ_DEFAULT_VHOST}
+    ports:
+      - "8990:8080"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
   postgres:
     ports:
-      - "${POSTGRES_PORT}:5932"
+      - "${POSTGRES_PORT}:5432"
 
   rabbitmq:
     ports:
-      - "${RABBITMQ_PORT}:5972"
-      - "${RABBITMQ_MANAGEMENT_PORT}:15972"
+      - "${RABBITMQ_PORT}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT}:15672"

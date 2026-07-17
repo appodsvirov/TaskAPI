@@ -10,6 +10,15 @@ services:
       rabbitmq:
         condition: service_healthy
 
+  taskconsumer:
+    image: ${DOCKER_REGISTRY-}taskconsumer
+    build:
+      context: .
+      dockerfile: TaskConsumer/Dockerfile
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
   postgres:
     image: postgres:${POSTGRES_VERSION}
     restart: unless-stopped

@@ -4,4 +4,5 @@
   </Project>
   <Project Path="TaskAPI.Tests/TaskAPI.Tests.csproj" />
   <Project Path="TaskAPI/TaskAPI.csproj" />
+  <Project Path="TaskConsumer/TaskConsumer.csproj" />
 </Solution>

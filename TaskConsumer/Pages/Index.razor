@@ -1,0 +1,69 @@
+@page "/"
+@implements IDisposable
+@inject TaskEventStore TaskEventStore
+
+<PageTitle>Task events</PageTitle>
+
+<section class="event-shell">
+    <header class="event-header">
+        <div>
+            <p class="eyebrow">RabbitMQ consumer</p>
+            <h1>Completed tasks</h1>
+        </div>
+        <div class="event-count">
+            <span>@events.Count</span>
+            <small>in memory</small>
+        </div>
+    </header>
+
+    @if (events.Count == 0)
+    {
+        <div class="empty-state">
+            <h2>No completed task events yet</h2>
+            <p>Complete a task in TaskAPI and the consumer will show the message here.</p>
+        </div>
+    }
+    else
+    {
+        <div class="event-list">
+            @foreach (var taskEvent in events)
+            {
+                <article class="event-item">
+                    <div class="event-main">
+                        <h2>@taskEvent.Title</h2>
+                        <p>@taskEvent.TaskId</p>
+                    </div>
+                    <div class="event-meta">
+                        <span class="priority @taskEvent.Priority.ToString().ToLowerInvariant()">@taskEvent.Priority</span>
+                        <span>Completed @taskEvent.CompletedAt.ToLocalTime().ToString("g")</span>
+                        <span>Received @taskEvent.ReceivedAt.ToLocalTime().ToString("T")</span>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+</section>
+
+@code {
+    private IReadOnlyList<ConsumedTaskEvent> events = [];
+
+    protected override void OnInitialized()
+    {
+        events = TaskEventStore.GetLatest();
+        TaskEventStore.Changed += OnStoreChanged;
+    }
+
+    private void OnStoreChanged()
+    {
+        _ = InvokeAsync(() =>
+        {
+            events = TaskEventStore.GetLatest();
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        TaskEventStore.Changed -= OnStoreChanged;
+    }
+}
